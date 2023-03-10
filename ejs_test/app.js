@@ -7,10 +7,10 @@ const mysql = require('mysql');
 
 // データベース接続情報
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'shou0810',
-  database: 'test'
+  host: '',
+  user: '',
+  password: '',
+  database: ''
 });
 
 app.get('/', function(req, res) {
