@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>hello</title>
+  </head>
+<body>
+  <button id="button" class="button is-size-5">ダークモードに切り替え</button>
+  <h1 class="title">world</h1>
+  <h2>IPアドレス: <%= ip_address %></h2>
+
+  <script>
+function toggleDarkMode() {
+  $("body").toggleClass("dark-mode");
+  if ($("body").hasClass("dark-mode")) {
+    $("#button").html("ライトモードに切り替える");
+  } else {
+    $("#button").html("ダークモードに切り替える");
+  }
+}
+
+$(document).ready(function() {
+  $("#button").click(function() {
+    toggleDarkMode();
+  });
+
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    /* ダークモードの場合の処理 */
+    toggleDarkMode();
+  }
+});
+
+  </script>
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    .dark-mode {
+      background-color: #2b2b2b;
+      color: #f0f0f0;
+    }
+  </style>
+</body>
+</html>
