@@ -16,7 +16,6 @@ const connection = mysql.createConnection({
 app.get('/', function(req, res) {
   // APIでグローバルIPアドレスを取得する
   const ipApiUrl = 'http://ip.jsontest.com/';
-
   const start = Date.now();
 
   http.get(ipApiUrl, (response) => {
@@ -29,21 +28,38 @@ app.get('/', function(req, res) {
       const elapsedTime = end - start;
       const ipAddress = JSON.parse(data).ip;
 
+      // IPアドレスが既に存在するかどうかをチェックする
+connection.query(
+  'SELECT * FROM ip_addresses WHERE ip_address = ?',
+  [ipAddress],
+  (error, results, fields) => {
+    if (error) throw error;
+
+    if (results.length > 0) {
+      // ip_addressが既に存在する場合の処理
+      console.log(`IPアドレス ${ipAddress} は既に存在します`);
+      // IPアドレスをレンダリングしてクライアントに送信する
+      res.render('index.ejs', { ip_address: ipAddress, ip_message:"あなたはすでにアクセスしたことがあります" });
+
+    } else {
+      // ip_addressが存在しない場合の処理
       // 取得したIPアドレスとレスポンスタイムをデータベースに記録する
       connection.query(
         'INSERT INTO ip_addresses (ip_address, response_time) VALUES (?, ?)',
         [ipAddress, elapsedTime],
         (error, results, fields) => {
           if (error) throw error;
+          console.log(`レスポンスタイム: ${elapsedTime}ms`);
+          console.log(`IPアドレス: ${ipAddress}`)
           console.log('IPアドレスと応答時間をデータベースに挿入しました');
+          // IPアドレスをレンダリングしてクライアントに送信する
+          res.render('index.ejs', { ip_address: ipAddress,ip_message:"あなたはまだアクセスしたことがありません。" });
         }
       );
-      
-      // IPアドレスをレンダリングしてクライアントに送信する
-      res.render('index.ejs', { ip_address: ipAddress });
+    }
+  }
+);
 
-      console.log(`レスポンスタイム: ${elapsedTime}ms`);
-      console.log(`IPアドレス: ${ipAddress}`)
     });
   }).on('error', (error) => {
     console.error(error);

@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head lang="ja">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <title>エラー</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   </head>
   <body>
-    <section class="section">
-      <div class="container">
-        <h1 class="title">申し訳ありません。このページは存在しません。</h1>
-        <p></p>
-      </div>
-    </section>
+    <script>
+      // ダークモードが有効な場合にtrueを返す関数
+      function isDarkMode() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      
+      // ページのテーマを変更する関数
+      function setTheme() {
+        if (isDarkMode()) {
+          $('body').addClass("dark-mode");
+        } else {
+          $('body').removeClass("dark-mode");
+        }
+      }
 
+      $(document).ready(function() {
+        setTheme();
+        
+        let countdown = 10;
+        setInterval(function() {
+          countdown--;
+          $('#redirect').text(countdown);
+          if (countdown === 0) {
+            location = '/';
+          }
+        }, 1000);
+      });
+    </script>
+    <h1>申し訳ありません。このページは存在しません。</h1>
+    <p><span id="redirect">10</span>秒後に移動します</p>
+    <style>
+      body {
+        background-color: #ffffff;
+        color: #000000;
+      }
+  
+      .dark-mode {
+        background-color: #2b2b2b;
+        color: #f0f0f0;
+      }
+    </style>
   </body>
 </html>

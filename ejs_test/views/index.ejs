@@ -7,8 +7,8 @@
   </head>
 <body>
   <button id="button" class="button is-size-5">ダークモードに切り替え</button>
-  <h1 class="title">world</h1>
   <h2>IPアドレス: <%= ip_address %></h2>
+  <h2><%= ip_message %></h2>
 
   <script>
 function toggleDarkMode() {
@@ -26,7 +26,6 @@ $(document).ready(function() {
   });
 
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    /* ダークモードの場合の処理 */
     toggleDarkMode();
   }
 });
